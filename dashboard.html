@@ -65,8 +65,9 @@ footer{max-width:1320px;margin:0 auto;padding:0 20px 28px;color:var(--mute);font
 @media (max-width:900px){.card{grid-column:span 12!important}.val.hero{font-size:40px}}
 @media (prefers-reduced-motion:reduce){aside{transition:none}}
 </style></head><body>
-<div class="note">I numeri mostrati vengono dalla traccia della prova e da oralpro.it. Gli altri riquadri indicano metrica, formula e fonte, e si riempiono quando le fonti vengono collegate.</div>
+<div class="note">Numeri dalla traccia e da oralpro.it. Gli altri riquadri si riempiono collegando le fonti.</div>
 <div class="top">
+  <a href="./" style="display:inline-block;min-height:32px;font-size:14px;color:var(--ink2)">Torna al progetto</a>
   <div class="brand"><h1>Cruscotto direzione</h1>
     <div class="ctl"><label>Prova una fonte ferma <select id="fail"><option value="">nessuna</option></select></label></div>
   </div>
@@ -75,7 +76,7 @@ footer{max-width:1320px;margin:0 auto;padding:0 20px 28px;color:var(--mute);font
   <p class="q" id="q"></p>
 </div>
 <main id="main"></main>
-<footer><a href="./" style="color:inherit">Torna ai materiali</a> · Il pulsante «?» su ogni riquadro apre la domanda a cui risponde, la formula, la query SQL e il limite da conoscere.</footer>
+<footer>Il pulsante «?» su ogni riquadro spiega domanda, calcolo, SQL e limite.</footer>
 <aside id="drawer" aria-hidden="true" tabindex="-1"><button class="x" aria-label="Chiudi" id="dx">×</button><div id="dc"></div></aside>
 <script>
 'use strict';
@@ -111,7 +112,7 @@ const MESI=['nov','dic','gen','feb','mar','apr','mag','giu','lug','ago','set','o
 const SRC={stripe:{n:'Stripe',t:'circa 3 min'},close:{n:'Close',t:'circa 3 min'},wise:{n:'Wise',t:'15 min, da provare'},revolut:{n:'Revolut',t:'15 min'},mercury:{n:'Mercury',t:'15 min'},meta:{n:'Meta',t:'1 ora'}};
 Object.keys(SRC).forEach(s=>document.getElementById('fail').add(new Option(SRC[s].n,s)));
 const BANKS=['wise','revolut','mercury'];
-let failing='',view=P.get('view')||'cassa';
+let failing='',view=P.get('view')||'ricavi';
 function renderSources(){document.getElementById('sources').innerHTML=Object.keys(SRC).map(s=>`<span class="src ${s===failing?'bad':''}"><i class="dot"></i><b>${SRC[s].n}</b><span>${s===failing?'ferma':'previsto: '+SRC[s].t}</span></span>`).join('')}
 const freshTxt=d=>!d.length?'Da aggiungere come nuova fonte':d.includes(failing)?`${SRC[failing].n} ferma: la metrica resta vuota e parte l'avviso.`:`Fonti: ${d.map(s=>SRC[s].n).join(', ')}`;
 const isStale=d=>failing&&d.includes(failing);
@@ -152,7 +153,7 @@ const all=Object.keys(SRC);return card('anom',7,all,items.map(a=>`<div class="al
 const TABS=[['cassa','Cassa'],['ricavi','Ricavi'],['acq','Acquisizione'],['anom','Anomalie']];
 function render(){if(!V[view])view='cassa';renderSources();document.getElementById('tabs').innerHTML=TABS.map(t=>`<button role="tab" aria-selected="${t[0]===view}" data-v="${t[0]}">${t[1]}</button>`).join('');document.getElementById('q').textContent=V[view].q;const bn=failing?`<div class="banner" role="status"><b>${SRC[failing].n} è ferma.</b> Le metriche che ne dipendono restano vuote: nessun numero vecchio che sembra aggiornato. L'avviso parte da solo e al ritorno della fonte i dati mancanti si recuperano.</div>`:'';document.getElementById('main').innerHTML=bn+V[view].r();drawCharts()}
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-if(b.dataset.v){view=b.dataset.v;render()}
+if(b.dataset.v){view=b.dataset.v;render();window.scrollTo(0,0);try{history.replaceState(null,'','?view='+view)}catch(_){}}
 if(b.dataset.x){const x=EX[b.dataset.x];document.getElementById('dc').innerHTML=`<h3>${x.t}</h3><h4>A quale domanda risponde</h4><p>${x.q}</p><h4>Come si calcola</h4><p>${x.c}</p><h4>In SQL</h4><pre>${x.s.replace(/</g,'&lt;')}</pre><h4>Limite da conoscere</h4><p>${x.l}</p>`;const d=document.getElementById('drawer');d.classList.add('on');d.setAttribute('aria-hidden','false');d.focus()}
 if(b.id==='dx')closeD()});
 const closeD=()=>{const d=document.getElementById('drawer');d.classList.remove('on');d.setAttribute('aria-hidden','true')};

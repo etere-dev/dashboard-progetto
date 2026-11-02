@@ -2,31 +2,252 @@
 <html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Dashboard di management - Davide Campo</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:light;--ink:#14181f;--ink2:#465061;--line:#d8dde5;--wash:#f3f5f8;--acc:#0f5fa8;--page:#fff}
-@media (prefers-color-scheme:dark){:root{color-scheme:dark;--ink:#eef1f5;--ink2:#b6bfcc;--line:#343b46;--wash:#1b2027;--acc:#6db0ec;--page:#12151a}}
+:root{color-scheme:light;--page:#fff;--ink:#14181f;--ink2:#4a5464;--line:#dfe3ea;--wash:#f4f6f9;--acc:#0f5fa8;--acc-ink:#fff;--acc-wash:#e8f1fa;--warm:#b4430f;--ok:#0a7a3e}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--page:#111419;--ink:#eef1f5;--ink2:#b4bdca;--line:#2e343e;--wash:#1a1e25;--acc:#79b6ee;--acc-ink:#0d1117;--acc-wash:#1b2a3a;--warm:#f0935f;--ok:#58c58c}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--page);color:var(--ink);font:400 16px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:1080px;margin:0 auto;padding:40px 16px 48px}
-header{border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:24px}
-h1{font-size:clamp(24px,4vw,32px);line-height:1.15;margin:0 0 4px;letter-spacing:-.01em}
-header p{margin:0;color:var(--ink2)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
-a.card{display:flex;flex-direction:column;color:inherit;text-decoration:none;background:var(--wash);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-a.card:hover{border-color:var(--acc)}
-a.card:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.prev{aspect-ratio:16/10;background:#fff;border-bottom:1px solid var(--line);overflow:hidden}
-.prev img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
-.txt{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
-h2{font-size:18px;margin:0 0 4px}
-.txt p{margin:0 0 12px;font-size:14.5px;color:var(--ink2)}
-.go{margin-top:auto;font-weight:600;color:var(--acc);font-size:14.5px}
-</style></head><body><main>
-<header><h1>Dashboard di management</h1><p>Davide Campo · materiali della prova per AI &amp; Automation Specialist</p></header>
-<div class="grid">
-<a class="card" href="dashboard.html"><div class="prev"><img src="cassa.png" alt="Anteprima della dashboard"></div><div class="txt"><h2>Dashboard cliccabile</h2><p>Quattro viste, con formula e SQL per ogni riquadro. Contiene solo i numeri della traccia e di oralpro.it; il menu in alto mostra cosa succede quando una fonte si ferma.</p><span class="go">Apri la dashboard</span></div></a>
-<a class="card" href="lavagna.png"><div class="prev"><img src="lavagna.png" alt="Anteprima della lavagna"></div><div class="txt"><h2>Lavagna</h2><p>Il ragionamento di partenza: cosa dicono i numeri, i due funnel e perché cambiano il CAC.</p><span class="go">Apri la lavagna</span></div></a>
-<a class="card" href="schemi.pdf"><div class="prev"><img src="schemi.png" alt="Anteprima degli schemi"></div><div class="txt"><h2>Schemi di progetto</h2><p>Architettura, modello dati, percorso del denaro, gestione dei guasti, limiti di ogni fonte e piano di lavoro. PDF, 8 pagine.</p><span class="go">Apri gli schemi</span></div></a>
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--page);color:var(--ink);font:400 17px/1.6 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:10px;background:var(--page);padding:6px 10px;z-index:30}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+.bar{position:sticky;top:0;z-index:10;background:var(--page);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:20px;min-height:56px}
+.who{font-weight:600;white-space:nowrap;text-decoration:none}
+.bar nav{margin-left:auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.bar nav::-webkit-scrollbar{display:none}
+.bar nav a{padding:8px 11px;border-radius:6px;font-size:15px;color:var(--ink2);text-decoration:none;white-space:nowrap}
+.bar nav a:hover{background:var(--wash);color:var(--ink)}
+.bar nav a[aria-current=true]{color:var(--acc);font-weight:600;background:var(--acc-wash)}
+.hero{padding:60px 0 48px}
+.kicker{font-size:15px;color:var(--ink2);margin:0 0 10px}
+h1{font-size:clamp(30px,5vw,44px);line-height:1.12;letter-spacing:-.015em;margin:0 0 16px;max-width:26ch}
+.lead{font-size:19px;line-height:1.5;color:var(--ink2);margin:0 0 24px;max-width:60ch}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:9px 16px;border-radius:8px;font-weight:600;font-size:15.5px;text-decoration:none;border:1px solid var(--line);background:var(--page);color:var(--ink)}
+.btn:hover{border-color:var(--acc);color:var(--acc)}
+.btn.main{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.btn.main:hover{color:var(--acc-ink);filter:brightness(1.1)}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:34px}
+a.bc{display:flex;flex-direction:column;text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+a.bc:hover{border-color:var(--acc)}
+a.bc small{font-size:13.5px;font-weight:600;color:var(--acc)}
+a.bc b{display:block;margin:2px 0 4px;font-size:17px}
+a.bc span{font-size:15px;line-height:1.45;color:var(--ink2)}
+section{padding:52px 0;border-top:1px solid var(--line)}
+h2{font-size:clamp(25px,3.4vw,31px);line-height:1.2;letter-spacing:-.01em;margin:0 0 14px}
+h3{font-size:19px;line-height:1.3;margin:32px 0 8px}
+.q{background:var(--wash);border-radius:10px;padding:14px 18px;margin:0 0 22px}
+.q small{display:block;font-size:13.5px;font-weight:600;color:var(--ink2);margin-bottom:2px}
+p{margin:0 0 14px;max-width:72ch}
+ul.t{margin:0 0 14px;padding-left:20px;max-width:72ch}ul.t li{margin-bottom:6px}
+.note{color:var(--ink2);font-size:15.5px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:.88em}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.box{border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column}
+.big{font-size:36px;font-weight:700;line-height:1.1;letter-spacing:-.015em;margin-bottom:4px}
+.big.s{font-size:25px}
+.small{font-size:15.5px;line-height:1.5;color:var(--ink2);margin:0}
+.box .then{margin:12px 0 0;font-weight:600;font-size:16px;line-height:1.45}
+.flow{list-style:none;padding:0;margin:0 0 18px;display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
+.flow li{position:relative;background:var(--wash);border-radius:10px;padding:13px 14px}
+.flow li b{display:block;font-size:15.5px}
+.flow li span{font-size:13.5px;color:var(--ink2);line-height:1.35;display:block;margin-top:2px}
+.flow li:not(:last-child)::after{content:"";position:absolute;right:-16px;top:50%;width:9px;height:9px;border-top:2px solid var(--ink2);border-right:2px solid var(--ink2);transform:translateY(-50%) rotate(45deg)}
+.views{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+a.view{display:flex;flex-direction:column;text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+a.view:hover{border-color:var(--acc)}
+a.view b{font-size:17px}
+a.view i{font-style:normal;font-weight:500;display:block;margin:1px 0 8px}
+a.view span{font-size:15px;line-height:1.45;color:var(--ink2);display:block;margin-bottom:4px}
+a.view em{font-style:normal;font-size:14.5px;font-weight:600;color:var(--acc);display:block;margin-top:auto;padding-top:8px}
+.stack{border-top:1px solid var(--line);margin-bottom:18px}
+.stack>div{display:grid;grid-template-columns:190px 1fr;gap:4px 20px;padding:15px 0;border-bottom:1px solid var(--line)}
+.stack b{font-weight:600}.stack b small{display:block;font-weight:400;font-size:13.5px;color:var(--ink2)}
+.stack p{margin:0;font-size:16px;line-height:1.5;max-width:none}
+.prob{border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:16px}
+.prob h3{font-size:21px;margin:0 0 14px}
+.prob h3 i{font-style:normal;color:var(--acc);margin-right:7px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;margin-bottom:16px}
+.lab{display:block;font-size:13.5px;font-weight:600;margin-bottom:3px}
+.lab.p{color:var(--warm)}.lab.s{color:var(--acc)}.lab.v{color:var(--ok)}
+.pair p,.pair ul{margin:0;font-size:16px;line-height:1.5}
+.pair ul{padding-left:18px}.pair li{margin-bottom:4px}
+.steps{border-top:1px solid var(--line)}
+.steps>div{display:grid;grid-template-columns:120px 1fr 1fr;gap:6px 20px;padding:14px 0;border-bottom:1px solid var(--line);font-size:16px;line-height:1.45}
+.steps b{font-weight:600}
+.steps span small{display:block;font-size:13.5px;color:var(--ink2)}
+.open{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+a.tile{display:flex;flex-direction:column;text-decoration:none;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+a.tile:hover{border-color:var(--acc)}
+a.tile img{display:block;width:100%;aspect-ratio:16/11;object-fit:cover;object-position:top;background:#fff;border-bottom:1px solid var(--line)}
+a.tile b{padding:10px 13px 0;font-size:15.5px}
+a.tile span{padding:1px 13px 12px;font-size:13.5px;line-height:1.4;color:var(--ink2)}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--ink2);font-size:14.5px}
+dialog{border:0;padding:0;width:min(1180px,96vw);max-height:94vh;border-radius:12px;background:var(--page);color:var(--ink)}
+dialog::backdrop{background:rgba(10,14,20,.72)}
+.vh{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--page)}
+.vh strong{margin-right:auto;font-size:15.5px}
+.vh button,.vh a{min-height:38px;min-width:38px;padding:5px 11px;border:1px solid var(--line);border-radius:7px;background:none;color:inherit;font:inherit;font-size:14.5px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.vh button:hover,.vh a:hover{border-color:var(--acc)}
+.vb{background:#fff;overflow:auto;max-height:calc(94vh - 60px)}
+.vb img{display:block;width:100%;height:auto}
+@media (max-width:760px){
+ .views{grid-template-columns:1fr}
+ body{font-size:16px}.who{display:none}.bar nav{margin-left:-6px}
+ .hero{padding:38px 0 34px}section{padding:40px 0}
+ .flow{grid-template-columns:1fr;gap:18px}
+ .flow li:not(:last-child)::after{right:auto;left:22px;top:auto;bottom:-13px;transform:rotate(135deg)}
+ .stack>div{grid-template-columns:1fr}.pair{grid-template-columns:1fr}.steps>div{grid-template-columns:1fr}
+ .prob{padding:18px}.vh strong{font-size:14px}.vh .full{display:none}
+}
+</style></head><body>
+<a class="skip" href="#partenza">Vai al contenuto</a>
+<header class="bar"><div class="wrap"><a class="who" href="#top">Davide Campo</a>
+<nav aria-label="Sezioni"><a href="#partenza">Da dove parto</a><a href="#progetto">(a) Progetto</a><a href="#stack">(b) Stack</a><a href="#problemi">(c) Problemi</a><a href="#piano">Piano</a><a href="#aprire">Da aprire</a></nav></div></header>
+
+<main id="top">
+<div class="hero"><div class="wrap">
+<p class="kicker">Prova di pre-selezione per AI &amp; Automation Specialist</p>
+<h1>Una sola dashboard per Close, Meta, Stripe e tre conti</h1>
+<p class="lead">Come la progetterei, con quali strumenti, quali problemi mi aspetto e come li risolverei. Ogni scelta ha il suo motivo, e schemi e dashboard si aprono da qui.</p>
+<div class="row"><a class="btn main" href="dashboard.html?view=ricavi">Apri la dashboard</a><a class="btn" href="img/lavagna.png" data-view="Lavagna: da dove parto">Vedi la lavagna</a><a class="btn" href="risposta.pdf">La risposta in una pagina</a></div>
+<div class="brief">
+<a class="bc" href="#progetto"><small>Domanda (a)</small><b>Il progetto</b><span>Un percorso unico per i dati, una frequenza decisa per ogni fonte e quattro viste legate a una domanda della direzione.</span></a>
+<a class="bc" href="#stack"><small>Domanda (b)</small><b>Lo stack</b><span>Python, Postgres in UE, dbt e Metabase: il minimo che regge i vincoli di banche e API, gestibile da una persona.</span></a>
+<a class="bc" href="#problemi"><small>Domanda (c)</small><b>I tre problemi</b><span>Fonti senza una chiave comune, soldi contati due volte e guasti che lasciano a schermo un numero vecchio.</span></a>
 </div>
-</main></body></html>
+</div></div>
+
+<section id="partenza"><div class="wrap">
+<h2>Prima dei grafici, i numeri</h2>
+<p>Una dashboard sbagliata di solito ha grafici belli sopra un modello dati sbagliato. Per questo sono partito confrontando i numeri della vostra traccia con quelli del vostro sito.</p>
+<div class="g2">
+<div class="box"><div class="big">circa 1,8</div><p class="small">abbonamenti per studio: 505 dalla traccia, oltre 280 studi su oralpro.it.</p><p class="then">Quindi l'unità di analisi è lo studio.</p><p class="small" style="margin-top:8px">Se uno studio chiude uno di due abbonamenti non è un cliente perso. Contando gli abbonamenti, churn e valore del cliente uscirebbero falsati.</p></div>
+<div class="box"><div class="big">1.700+</div><p class="small">visite inviate in un mese su oralpro.it, contro oltre 500 deal dalla traccia.</p><p class="then">Quindi probabilmente i pazienti non stanno in Close, e i funnel sono due.</p><p class="small" style="margin-top:8px">Se parte di Meta porta pazienti, dividere tutta la spesa per i nuovi abbonati gonfia il costo di acquisizione degli studi.</p></div>
+</div>
+<h3>Cosa chiederei il primo giorno</h3>
+<ul class="t"><li>Quale account Meta serve quale funnel?</li><li>Uno studio può avere più abbonamenti, e un deal corrisponde a uno studio o a un abbonamento?</li><li>Quali decisioni prende oggi la direzione con questi numeri, e con che strumento?</li></ul>
+<p class="note">Sono ipotesi. Se fossero sbagliate cambierebbero il modello dati e l'analisi privacy, per questo vengono prima di tutto il resto.</p>
+<div class="row"><a class="btn" href="img/lavagna.png" data-view="Lavagna: da dove parto">Apri la lavagna</a></div>
+</div></section>
+
+<section id="progetto"><div class="wrap">
+<h2>Il progetto</h2>
+<div class="q"><small>Domanda (a)</small>Come progetteresti una dashboard di management in tempo reale che consolidi tutte queste fonti?</div>
+<h3 style="margin-top:0">Cosa vuol dire «tempo reale»</h3>
+<p>Lo decido fonte per fonte, in base a quanto presto il dato può cambiare una decisione. Per il budget Meta basta un'ora, un pagamento fallito va visto entro pochi minuti.</p>
+<div class="g3">
+<div class="box"><div class="big s">circa 3 minuti</div><p class="small"><b>Stripe e Close.</b> Webhook, più un controllo ogni 15 minuti sull'API: un webhook rotto, visto da fuori, somiglia a «nessun evento».</p></div>
+<div class="box"><div class="big s">15 minuti</div><p class="small"><b>Wise, Revolut, Mercury.</b> Webhook dove disponibile, più lettura periodica di movimenti e saldi. L'accesso a Wise va provato: se il token non basta, estratti del giorno dopo.</p></div>
+<div class="box"><div class="big s">1 ora</div><p class="small"><b>Meta, 3 account.</b> Lettura oraria e, di notte, riscarico degli ultimi 28 giorni, perché le conversioni si attribuiscono a posteriori.</p></div>
+</div>
+<h3>Il percorso dei dati</h3>
+<ol class="flow">
+<li><b>Fonti</b><span>Webhook e letture programmate</span></li>
+<li><b>raw</b><span>JSON con id, solo aggiunte, campi personali filtrati</span></li>
+<li><b>core</b><span>Studi, abbonamenti, deal, movimenti, spesa</span></li>
+<li><b>metriche</b><span>Viste SQL, ogni calcolo definito una volta sola</span></li>
+<li><b>dashboard</b><span>Viste e avvisi</span></li>
+</ol>
+<p>Il webhook fa solo da campanello: verifico la firma, salvo l'evento e rispondo 200. Poi il worker rilegge l'oggetto dall'API e aggiunge la versione a raw. Stripe dichiara che gli eventi possono arrivare doppi e fuori ordine, così dal loro ordine non dipendo.</p>
+<p>Core lo costruisce dbt a partire da raw: una regola sbagliata si corregge e si ricalcola senza riscaricare nulla, e lo storico degli abbonamenti resta, compreso il grafico dell'MRR nel tempo.</p>
+<div class="row"><a class="btn" href="img/architettura.png" data-view="Architettura">Apri l'architettura</a></div>
+<h3>Quattro viste, ognuna con la sua domanda</h3>
+<div class="views">
+<a class="view" href="dashboard.html?view=cassa"><b>Cassa</b><i>Quanti mesi di costi coprono i conti?</i><span>Saldi per conto e valuta, mesi coperti, entrate e uscite senza giroconti.</span><span>Decisione: quanto si può spendere e dove tenere la liquidità.</span><em>Apri la vista</em></a>
+<a class="view" href="dashboard.html?view=ricavi"><b>Ricavi</b><i>Quanto incassiamo di ricorrente e quanto rischiamo?</i><span>MRR, nuovi, disdette, abbonamenti con pagamento fallito.</span><span>Decisione: chi richiamare oggi.</span><em>Apri la vista</em></a>
+<a class="view" href="dashboard.html?view=acq"><b>Acquisizione</b><i>Quanto costa acquisire uno studio?</i><span>CAC e payback per funnel e account, deal per stato.</span><span>Decisione: dove spostare il budget.</span><em>Apri la vista</em></a>
+<a class="view" href="dashboard.html?view=anom"><b>Anomalie</b><i>Cosa va guardato adesso?</i><span>Deal vinti senza abbonamento, abbonati in ritardo, fonti ferme.</span><span>Decisione: cosa sistemare oggi.</span><em>Apri la vista</em></a>
+</div>
+<h3>Privacy e permessi</h3>
+<p>Database in UE. Prima di salvare filtro i campi personali che non servono e do al grezzo una scadenza. Dati di pazienti non ne entrano, solo aggregati: sono dati sanitari e qui non servono. Sulle banche uso token di sola lettura dove esistono, perché la dashboard non deve poter muovere denaro, e i conti li vedono solo direzione e amministrazione.</p>
+</div></section>
+
+<section id="stack"><div class="wrap">
+<h2>Lo stack</h2>
+<div class="q"><small>Domanda (b)</small>Quale stack tecnologico useresti e perché?</div>
+<div class="stack">
+<div><b>Python su VPS in UE<small>Connettori</small></b><p>Revolut chiede piano Grow, certificato e JWT; il token personale di Wise copre pochi endpoint. Paginazioni, pause sui limiti e logica sui soldi richiedono codice versionato e testato.</p></div>
+<div><b>Postgres in UE e dbt<small>Dati</small></b><p>Stimo poche migliaia di righe al mese. Postgres basta, costa poco e lo mantiene una persona. dbt tiene metriche e test sui dati in un posto solo, sotto git.</p></div>
+<div><b>Metabase Open Source<small>Interfaccia</small></b><p>Prima versione in pochi giorni. Limiti che conosco: i permessi sono per collezione, quindi le banche stanno in una riservata; i colori dei numeri seguono il valore e non l'età del dato, quindi oltre la soglia la metrica resta vuota.</p></div>
+<div><b>n8n<small>Avvisi</small></b><p>Per gli avvisi su Slack o email e le automazioni operative, dove un flusso a blocchi è più veloce da cambiare.</p></div>
+<div><b>Regole, poi LLM<small>AI</small></b><p>Regole fisse sui casi noti. Sul resto l'LLM riceve causali pseudonimizzate e propone la categoria del movimento; sotto una soglia di confidenza conferma una persona. I numeri li calcola solo SQL.</p></div>
+</div>
+<h3>Cosa ho scartato e perché</h3>
+<ul class="t"><li><b>n8n o Make come motore dei dati:</b> comodi da costruire, meno adatti a firme, test e logica sui soldi. Se il team lavora già lì, sposto lì le fonti semplici.</li><li><b>BigQuery o Snowflake:</b> sovradimensionati per questi volumi. Se crescessero molto, il modello SQL si sposta.</li><li><b>Front-end su misura da subito:</b> lo farei solo se Metabase non basta. La dashboard che trovate qui serve a discutere contenuti e comportamento.</li><li><b>Power BI o Looker Studio:</b> se in azienda ne usate già uno parto da quello, conta più il modello dati dello strumento.</li></ul>
+<p class="note">Stima: 50-100 € al mese di infrastruttura.</p>
+<div class="row"><a class="btn" href="img/fonti.png" data-view="Fonti, limiti e piano">Apri limiti delle fonti e documentazione</a></div>
+</div></section>
+
+<section id="problemi"><div class="wrap">
+<h2>I tre problemi più probabili</h2>
+<div class="q"><small>Domanda (c)</small>Quali sono i 3 problemi tecnici più probabili che potresti incontrare e come li risolveresti?</div>
+<article class="prob"><h3><i>1</i>Nessuna chiave comune</h3><div class="pair">
+<p><span class="lab p">Il problema</span>Meta conosce un lead, Close un deal, Stripe un customer, la banca un bonifico. Senza un collegamento non si calcola né il CAC né il valore di uno studio.</p>
+<div><span class="lab s">Come lo risolvo</span><ul><li>Una tabella <span class="num">studio_map</span> che registra anche come è nato ogni collegamento.</li><li>Da subito scrivo gli id di lead e opportunità di Close nei metadata Stripe, e l'origine Meta (<span class="num">ad_id</span> o UTM) su Close.</li><li>Lo storico lo abbino su P.IVA, email e telefono normalizzati. I casi dubbi, come una P.IVA con più sedi, vanno a una persona.</li></ul></div>
+<p style="grid-column:1/-1"><span class="lab v">Come verifico che funziona</span>La copertura è una metrica visibile: quanti abbonamenti hanno uno studio. Sotto il 90% il CAC porta un avviso.</p></div>
+<div class="row"><a class="btn" href="img/modello.png" data-view="Modello dati">Apri il modello dati</a></div></article>
+<article class="prob"><h3><i>2</i>Soldi contati due volte</h3><div class="pair">
+<p><span class="lab p">Il problema</span>Un payout Stripe entra in banca e sembra un nuovo incasso. Un giroconto Wise-Revolut compare come uscita ed entrata. I saldi sono in più valute, e sommandoli senza classificare le entrate risultano gonfiate.</p>
+<div><span class="lab s">Come lo risolvo</span><ul><li>Un registro unico in valuta originale, con l'ultimo cambio BCE salvato sulla riga solo per le viste in euro.</li><li>Scompongo i payout con le balance transaction e li abbino alla banca su importo e data.</li><li>Abbino i giroconti su importo, date e controparte; i dubbi vanno a una persona.</li></ul></div>
+<p style="grid-column:1/-1"><span class="lab v">Come verifico che funziona</span>Ogni notte saldo iniziale più movimenti scaricati deve dare il saldo dichiarato dall'API. Se non torna manca un movimento. MRR e cassa restano viste distinte e non devono coincidere.</p></div>
+<div class="row"><a class="btn" href="img/euro.png" data-view="Il percorso di un euro">Apri il percorso di un euro</a></div></article>
+<article class="prob"><h3><i>3</i>Guasti silenziosi: il numero sembra giusto, ma è vecchio</h3><div class="pair">
+<div><span class="lab p">Il problema</span><ul><li>Revolut ritenta un webhook 3 volte a 10 minuti, Stripe per 3 giorni: lo stesso guasto ha effetti diversi.</li><li>Dal 12/01/2026 Meta non restituisce più le finestre <span class="num">7d_view</span> e <span class="num">28d_view</span>.</li><li>Il token personale Wise legge gli estratti conto solo per conti in sei paesi, UE e UK esclusi.</li><li>L'event log di Close si ferma a 30 giorni.</li></ul></div>
+<div><span class="lab s">Come lo risolvo</span><ul><li>Ogni 15 minuti confronto il database con la fonte, per esempio abbonamenti attivi nel DB e su Stripe.</li><li>Recupero gli eventi falliti e tengo sotto allarme le scadenze dei token.</li><li>Un campo sparito dalla risposta fa fallire il controllo.</li><li>Se una fonte non passa, la metrica resta vuota e parte l'avviso.</li></ul></div>
+<p style="grid-column:1/-1"><span class="lab v">Come verifico che funziona</span>Un servizio esterno avvisa se il controllo stesso smette di girare. In prova spengo una fonte e guardo cosa succede: nella dashboard lo si può fare col menu in alto.</p></div>
+<div class="row"><a class="btn main" href="dashboard.html?view=cassa&amp;fail=revolut">Prova una fonte ferma</a><a class="btn" href="img/guasti.png" data-view="Quando qualcosa va storto">Apri lo schema dei guasti</a></div></article>
+<p class="note" style="margin-top:20px">Un dato manca fra queste fonti: le visite inviate a ogni studio. Le aggiungerei per prime, perché se calano lo studio probabilmente sta per disdire.</p>
+</div></section>
+
+<section id="piano"><div class="wrap">
+<h2>Come ci arriverei</h2>
+<p>Stima per una persona. Comincio dai soldi e dalle banche, perché l'accesso reale ai conti è il rischio che può spostare i tempi.</p>
+<div class="steps">
+<div><b>Settimana 1</b><span>Definizioni delle metriche con la direzione, accessi alle banche<small>Cosa faccio</small></span><span>Definizioni approvate e accesso reale provato su ogni conto<small>Cosa vedete</small></span></div>
+<div><b>Settimane 1-2</b><span>Stripe e conti collegati, primi controlli<small>Cosa faccio</small></span><span>Viste Ricavi e Cassa con dati veri<small>Cosa vedete</small></span></div>
+<div><b>Settimane 3-4</b><span>Close, Meta e <span class="num">studio_map</span><small>Cosa faccio</small></span><span>Vista Acquisizione, CAC per funnel e copertura<small>Cosa vedete</small></span></div>
+<div><b>Settimane 5-6</b><span>Anomalie, categorie, permessi, passaggio in uso<small>Cosa faccio</small></span><span>Dashboard completa e avvisi attivi<small>Cosa vedete</small></span></div>
+</div>
+</div></section>
+
+<section id="aprire"><div class="wrap">
+<h2>Tutto quello che si può aprire</h2>
+<div class="open">
+<a class="tile" href="dashboard.html?view=ricavi"><img src="img/dashboard.png" alt="" loading="lazy"><b>Dashboard</b><span>Quattro viste, con calcolo e SQL su ogni riquadro</span></a>
+<a class="tile" href="img/lavagna.png" data-view="Lavagna: da dove parto"><img src="img/lavagna.png" alt="" loading="lazy"><b>Lavagna</b><span>Il ragionamento di partenza</span></a>
+<a class="tile" href="img/architettura.png" data-view="Architettura"><img src="img/architettura.png" alt="" loading="lazy"><b>Architettura</b><span>Il sistema intero</span></a>
+<a class="tile" href="img/modello.png" data-view="Modello dati"><img src="img/modello.png" alt="" loading="lazy"><b>Modello dati</b><span>Come si collegano le fonti</span></a>
+<a class="tile" href="img/euro.png" data-view="Il percorso di un euro"><img src="img/euro.png" alt="" loading="lazy"><b>Percorso di un euro</b><span>Dove nasce il doppio conteggio</span></a>
+<a class="tile" href="img/guasti.png" data-view="Quando qualcosa va storto"><img src="img/guasti.png" alt="" loading="lazy"><b>Guasti</b><span>Sei scenari e cosa succede</span></a>
+<a class="tile" href="img/fonti.png" data-view="Fonti, limiti e piano"><img src="img/fonti.png" alt="" loading="lazy"><b>Fonti e piano</b><span>Limiti, con i link alla documentazione nel PDF</span></a>
+<a class="tile" href="schemi.pdf"><img src="img/architettura.png" alt="" loading="lazy"><b>Tutti gli schemi in PDF</b><span>8 pagine, con i link attivi</span></a>
+</div>
+</div></section>
+</main>
+
+<footer><div class="wrap">Davide Campo · I numeri vengono dalla traccia della prova e da oralpro.it · Tempi e costi sono stime</div></footer>
+
+<dialog id="v" aria-labelledby="vt"><div class="vh"><strong id="vt"></strong><button id="vp" aria-label="Schema precedente">‹</button><button id="vn" aria-label="Schema successivo">›</button><a class="full" id="vf" target="_blank" rel="noopener">A tutto schermo</a><button id="vx">Chiudi</button></div><div class="vb"><img id="vi" src="img/lavagna.png" alt="Lavagna"></div></dialog>
+<script>
+// Il visore è un miglioramento: senza JavaScript i link aprono comunque l'immagine.
+const d=document.getElementById('v'),im=document.getElementById('vi'),tt=document.getElementById('vt'),ff=document.getElementById('vf');
+const seen=new Set(),items=[];document.querySelectorAll('a[data-view]').forEach(a=>{const h=a.getAttribute('href');if(!seen.has(h)){seen.add(h);items.push({h,t:a.dataset.view})}});
+let cur=0;
+function show(i){cur=(i+items.length)%items.length;const it=items[cur];im.src=it.h;im.alt=it.t;tt.textContent=it.t;ff.href=it.h;d.querySelector('.vb').scrollTop=0}
+document.addEventListener('click',e=>{const a=e.target.closest('a[data-view]');if(!a||e.metaKey||e.ctrlKey)return;e.preventDefault();show(items.findIndex(x=>x.h===a.getAttribute('href')));d.showModal()});
+document.getElementById('vx').onclick=()=>d.close();
+document.getElementById('vp').onclick=()=>show(cur-1);
+document.getElementById('vn').onclick=()=>show(cur+1);
+d.addEventListener('click',e=>{if(e.target===d)d.close()});
+d.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1)});
+// La voce di menu segue la sezione che si sta leggendo.
+const links=[...document.querySelectorAll('.bar nav a')],secs=links.map(l=>document.querySelector(l.getAttribute('href')));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.removeAttribute('aria-current'));const l=links[secs.indexOf(e.target)];l.setAttribute('aria-current','true');const n=l.parentElement;if(n.scrollWidth>n.clientWidth)n.scrollTo({left:l.offsetLeft-n.offsetLeft-20,behavior:'auto'})}}),{rootMargin:'-30% 0px -60% 0px'});secs.forEach(s=>io.observe(s));
+</script>
+</body></html>
