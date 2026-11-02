@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cruscotto direzione - Davide Campo</title>
+<style>
+:root{color-scheme:light;--page:#f6f6f3;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--mute:#6f6d68;--grid:#e1e0d9;--base:#c3c2b7;--ring:rgba(11,11,11,.10);--wash:#efeee9;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--good:#0ca30c;--warn:#fab219;--crit:#d03b3b}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme=light])){color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--mute:#a09e97;--grid:#2c2c2a;--base:#383835;--ring:rgba(255,255,255,.10);--wash:#262624;--s1:#3987e5;--s2:#d95926;--s3:#199e70}}
+:root[data-theme=dark]{color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--mute:#a09e97;--grid:#2c2c2a;--base:#383835;--ring:rgba(255,255,255,.10);--wash:#262624;--s1:#3987e5;--s2:#d95926;--s3:#199e70}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:400 14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,select{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.note{background:var(--ink);color:var(--surface);font-size:12.5px;padding:6px 20px;text-align:center}
+.top{max-width:1320px;margin:0 auto;padding:18px 20px 0}
+.brand{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:center}
+h1{font-size:20px;font-weight:650;margin:0}
+.ctl{font-size:13px;color:var(--ink2)}
+.ctl select{padding:5px 8px;border:1px solid var(--ring);border-radius:6px;background:var(--surface)}
+.sources{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.src{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border-radius:99px;background:var(--surface);border:1px solid var(--ring);font-size:12.5px;white-space:nowrap}
+.src b{font-weight:600}.src span{color:var(--ink2)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--base)}
+.src.bad{border-color:var(--crit)}.src.bad .dot{background:var(--crit)}
+nav{display:flex;gap:4px;margin-top:14px;border-bottom:1px solid var(--base);overflow-x:auto}
+nav button{border:0;background:none;padding:9px 14px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--ink2);white-space:nowrap}
+nav button[aria-selected=true]{color:var(--ink);font-weight:600;border-color:var(--ink)}
+.q{font-size:13.5px;color:var(--ink2);margin:14px 0 0}
+main{max-width:1320px;margin:0 auto;padding:12px 20px 24px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--ring);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;min-width:0;grid-column:span var(--w,12)}
+.ch{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.ch h2{font-size:13.5px;font-weight:600;margin:0;color:var(--ink2)}
+.act button{border:1px solid var(--ring);background:none;border-radius:6px;font-size:12px;padding:1px 7px;color:var(--ink2)}
+.val{font-size:30px;font-weight:650;line-height:1.15;margin-top:6px;letter-spacing:-.01em}
+.val.hero{font-size:50px}
+.val.empty{color:var(--base)}
+.sub{font-size:13px;color:var(--ink2);margin-top:3px}
+.prov{font-size:12px;color:var(--ink2);margin-top:5px}
+.prov b{font-weight:600}
+.fresh{margin-top:auto;padding-top:9px;font-size:11.5px;color:var(--mute)}
+.stale{border-color:var(--crit)}
+.stale .fresh{color:var(--crit);font-weight:600}
+.chart{margin-top:8px}.chart svg{display:block;width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font-size:12.5px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}
+th{font-size:12px;font-weight:600;color:var(--ink2);text-align:left;border-bottom:1px solid var(--base);padding:5px 8px 5px 0}
+td{border-bottom:1px solid var(--grid);padding:6px 8px 6px 0;vertical-align:top}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dash{color:var(--mute)}
+.scroll{overflow-x:auto}
+.alert{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;padding:10px 0;border-bottom:1px solid var(--grid)}
+.alert:last-child{border:0}
+.tag{font-size:12px;font-weight:600;display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
+.tag i{font-style:normal;width:16px;height:16px;border-radius:50%;display:inline-grid;place-items:center;font-size:11px;font-weight:700;color:#fff}
+.tag.c i{background:var(--crit)}.tag.w i{background:var(--warn);color:#0b0b0b}
+.alert p{margin:0;grid-column:2}.alert small{grid-column:2;color:var(--ink2);font-size:12.5px}
+.banner{grid-column:1/-1;border:1px solid var(--crit);border-radius:10px;padding:10px 14px;background:var(--surface)}
+aside{position:fixed;top:0;right:0;bottom:0;width:min(430px,100vw);background:var(--surface);border-left:1px solid var(--base);padding:20px;overflow:auto;transform:translateX(102%);visibility:hidden;transition:transform .18s,visibility .18s;z-index:20}
+aside.on{transform:none;visibility:visible;box-shadow:-10px 0 30px rgba(0,0,0,.16)}
+aside h3{margin:0 34px 4px 0;font-size:17px}
+aside h4{margin:14px 0 3px;font-size:12px;font-weight:600;color:var(--ink2)}
+aside p{margin:0}
+aside pre{font:12px/1.45 ui-monospace,Menlo,Consolas,monospace;background:var(--wash);padding:9px;border-radius:6px;white-space:pre-wrap;margin:0}
+aside .x{position:absolute;top:14px;right:14px;border:1px solid var(--ring);border-radius:6px;background:none;width:30px;height:30px}
+footer{max-width:1320px;margin:0 auto;padding:0 20px 28px;color:var(--mute);font-size:12px}
+@media (max-width:900px){.card{grid-column:span 12!important}.val.hero{font-size:40px}}
+@media (prefers-reduced-motion:reduce){aside{transition:none}}
+</style></head><body>
+<div class="note">I numeri mostrati vengono dalla traccia della prova e da oralpro.it. Gli altri riquadri indicano metrica, formula e fonte, e si riempiono quando le fonti vengono collegate.</div>
+<div class="top">
+  <div class="brand"><h1>Cruscotto direzione</h1>
+    <div class="ctl"><label>Prova una fonte ferma <select id="fail"><option value="">nessuna</option></select></label></div>
+  </div>
+  <div class="sources" id="sources" aria-label="Le sei fonti e il ritardo previsto"></div>
+  <nav role="tablist" id="tabs"></nav>
+  <p class="q" id="q"></p>
+</div>
+<main id="main"></main>
+<footer><a href="./" style="color:inherit">Torna ai materiali</a> · Il pulsante «?» su ogni riquadro apre la domanda a cui risponde, la formula, la query SQL e il limite da conoscere.</footer>
+<aside id="drawer" aria-hidden="true" tabindex="-1"><button class="x" aria-label="Chiudi" id="dx">×</button><div id="dc"></div></aside>
+<script>
+'use strict';
+const P=new URLSearchParams(location.search);if(P.get('theme'))document.documentElement.dataset.theme=P.get('theme');
+const EX={
+perst:{t:'Abbonamenti per studio',q:'L\'unità di analisi è lo studio o l\'abbonamento?',c:'505 abbonamenti della traccia divisi per gli oltre 280 studi dichiarati su oralpro.it. È un\'ipotesi di partenza da verificare con la direzione.',s:'SELECT COUNT(*)::float / COUNT(DISTINCT studio_id)\nFROM core.subscription;',l:'Il numero preciso esce solo dopo il collegamento di Stripe con studio_map.'},
+visite:{t:'Visite inviate agli studi',q:'Quale dato manca nelle sei fonti?',c:'Le visite sono il servizio che lo studio riceve. Non stanno in Close, Meta, Stripe o nei conti: sono il primo dato che aggiungerei.',s:'SELECT studio_id, month, COUNT(*) FROM core.visita GROUP BY 1,2;',l:'Se le visite calano, lo studio probabilmente sta per disdire: è un\'ipotesi da provare sui dati.'},
+cassa:{t:'Cassa totale',q:'Quanti soldi abbiamo oggi, in una sola valuta?',c:'Somma dei saldi letti dalle API dei tre istituti, convertiti in euro con l\'ultimo cambio BCE disponibile. Il saldo originale resta sempre salvato.',s:'SELECT SUM(b.balance * fx.rate)\nFROM core.account_balance b\nJOIN core.fx_rate fx USING (currency, day)\nWHERE b.day = current_date;',l:'Il cambio BCE è di riferimento: il valore reale di una conversione dipende dalla commissione applicata.'},
+coper:{t:'Mesi di costi coperti',q:'Per quanto tempo reggiamo se gli incassi si fermassero?',c:'Cassa totale divisa per la media delle uscite degli ultimi 3 mesi. Giroconti esclusi.',s:'cassa_totale / AVG(uscite_mese)  -- ultimi 3 mesi',l:'Una spesa una tantum sposta la media: nella versione vera andrebbe etichettata.'},
+gir:{t:'Giroconti esclusi',q:'Quanto movimento fra i nostri conti avrebbe gonfiato entrate e uscite?',c:'Un trasferimento fra due conti aziendali compare come uscita su uno ed entrata sull\'altro. Li abbino per importo, finestra di date e controparte e li tolgo dai totali.',s:"UPDATE core.txn SET kind = 'internal_transfer'\nWHERE id IN (SELECT id FROM matched_pairs);",l:'Se le valute sono diverse gli importi non coincidono: serve una tolleranza sul cambio, e i casi dubbi vanno confermati da una persona.'},
+scost:{t:'Scostamento dei saldi',q:'Possiamo fidarci dei movimenti scaricati?',c:'Saldo iniziale più movimenti scaricati deve dare il saldo che la banca dichiara via API. Il controllo completo gira ogni notte.',s:'saldo_ieri + SUM(movimenti_oggi) - saldo_api_oggi = 0',l:'Uno scostamento diverso da zero vuol dire quasi sempre che manca un movimento: è il sintomo di un webhook perso.'},
+split:{t:'Dove sono i soldi',q:'Quanto dipendiamo da un solo istituto o da una sola valuta?',c:'Ogni conto in valuta, convertito in euro. La larghezza è proporzionale al saldo.',s:'SELECT bank, currency, balance * rate FROM mart.cash_by_account;',l:'I conti restano visibili solo a direzione e amministrazione.'},
+saldo:{t:'Andamento della cassa',q:'La cassa sale o scende?',c:'Saldo di fine mese in euro, con cambio storico di ciascun giorno.',s:'SELECT month, closing_eur FROM mart.cash_monthly;',l:'Una parte della variazione può dipendere dal cambio, non dagli incassi.'},
+flussi:{t:'Entrate e uscite',q:'Stiamo generando cassa con l\'attività?',c:'Movimenti del mese. I payout Stripe contano come entrate di cassa, i giroconti sono esclusi.',s:"SELECT month, kind, SUM(amount_eur) FROM core.txn\nWHERE kind <> 'internal_transfer' GROUP BY 1,2;",l:'Questa è cassa e non ricavo: non deve coincidere con l\'MRR.'},
+conti:{t:'Riconciliazione per conto',q:'Ogni singolo saldo torna?',c:'Per ogni conto confronto il saldo calcolato dai movimenti con quello dichiarato dall\'API.',s:'SELECT account, computed_balance, api_balance FROM mart.reconciliation;',l:'Il token personale Wise legge gli estratti conto solo per conti in sei paesi, UE e UK esclusi: l\'accesso va provato nella prima settimana.'},
+mrr:{t:'MRR',q:'Quanto incassiamo di ricorrente al mese?',c:'L\'API di Stripe non ha un campo MRR: va calcolato. Ogni voce di abbonamento è riportata al mese (annuale diviso 12), con gli sconti, senza le prove gratuite. Gli abbonati in ritardo restano dentro e compaiono anche come MRR a rischio.',s:"SELECT SUM(monthly_amount_eur)\nFROM core.subscription\nWHERE status IN ('active','past_due');",l:'La definizione va concordata con la direzione una volta sola, prima di costruire il grafico.'},
+att:{t:'Abbonamenti attivi',q:'Quanti abbonamenti sono vivi?',c:'Conteggio degli abbonamenti attivi o in ritardo. Ogni 15 minuti lo confronto con lo stesso conteggio chiesto all\'API di Stripe.',s:"SELECT COUNT(*) FROM core.subscription\nWHERE status IN ('active','past_due');",l:'È anche il controllo più semplice che il flusso dei webhook non abbia perso eventi.'},
+churn:{t:'Disdette del mese',q:'Quanti abbonati perdiamo?',c:'Abbonamenti cessati nel mese, divisi per gli attivi a inizio mese.',s:'cessati_mese / attivi_inizio_mese',l:'Va letto anche per studio: se uno studio chiude uno di due abbonamenti non è perso.'},
+risk:{t:'MRR a rischio',q:'Quali incassi stanno per saltare?',c:'MRR degli abbonamenti in stato past_due, cioè con l\'ultimo pagamento fallito.',s:"SELECT SUM(monthly_amount_eur) FROM core.subscription\nWHERE status = 'past_due';",l:'Stripe ritenta da solo secondo le impostazioni: qui si vede cosa recuperare a mano.'},
+mrrc:{t:'Andamento dell\'MRR',q:'La crescita continua?',c:'MRR a fine di ogni mese, dai movimenti della tabella successiva.',s:'SELECT month, mrr_eur FROM mart.mrr_monthly;',l:'Un cambio di listino appare come espansione: va distinto da un upgrade reale.'},
+mov:{t:'Aggiunto e perso',q:'La crescita viene dai nuovi o stiamo perdendo meno?',c:'Aggiunto: nuovi abbonamenti ed espansioni. Perso: disdette e riduzioni. Il saldo è la variazione di MRR.',s:'SELECT month, new+expansion AS aggiunto, churn+contraction AS perso\nFROM mart.mrr_movements;',l:'La chiusura di uno studio intero va distinta dalla disdetta di un solo abbonamento.'},
+cac:{t:'CAC funnel studi',q:'Quanto costa acquisire un nuovo studio?',c:'Spesa dell\'account Meta dedicato agli studi, divisa per i nuovi studi del mese. Versione iniziale: i costi commerciali si aggiungono appena disponibili.',s:"SELECT spend / new_studios FROM mart.cac_monthly\nWHERE funnel = 'studi';",l:'Con un ciclo di vendita lungo la spesa di oggi porta studi fra settimane: con dati veri si confronta per coorte.'},
+falso:{t:'Il CAC che non userei',q:'Che errore si farebbe mescolando i due funnel?',c:'Tutta la spesa Meta divisa per i nuovi studi. Include la spesa che porta pazienti e non abbonamenti, quindi sovrastima il costo di acquisizione.',s:'SUM(spesa_tutti_gli_account) / nuovi_studi  -- da non usare',l:'Vale se davvero i due funnel convivono: è la prima ipotesi da verificare.'},
+pay:{t:'Payback',q:'In quanti mesi rientriamo del costo di acquisizione?',c:'Spesa dell\'account studi divisa per l\'MRR dei nuovi abbonamenti del mese. Non dipende da quanti abbonamenti ha uno studio.',s:'spesa_account_studi / mrr_nuovo',l:'Sul ricavo e non sul margine: con il margine lordo i mesi aumentano. Lo aggiungerei appena disponibile.'},
+cop:{t:'Copertura del collegamento',q:'Di quanti abbonamenti conosciamo studio e origine?',c:'Abbonamenti Stripe collegati a uno studio in studio_map, sul totale. Sotto il 90% il CAC riceve un avviso.',s:'SELECT COUNT(studio_id)::float / COUNT(*) FROM core.subscription;',l:'È la misura di quanto sono affidabili tutte le metriche che uniscono più fonti.'},
+spesa:{t:'Spesa Meta per account',q:'Dove va il budget pubblicitario?',c:'Spesa mensile da Marketing API. Ogni notte riscarico gli ultimi 28 giorni.',s:'SELECT month, account, spend_eur FROM mart.meta_monthly;',l:'Ogni account può avere il proprio fuso e la propria valuta: i giorni non coincidono per forza.'},
+pipe:{t:'Deal in Close',q:'Dove si fermano i deal?',c:'Deal per stato, dall\'ultima lettura di Close.',s:'SELECT stage, COUNT(*) FROM core.deal GROUP BY stage;',l:'Conta quanto tempo un deal resta fermo in uno stato, oltre al numero: è il passo successivo.'},
+acc:{t:'Account e funnel',q:'Quale account serve quale funnel e con che costo?',c:'L\'etichetta di funnel è un dato che imposto io su ogni account. Se l\'ipotesi è sbagliata cambia una riga di configurazione.',s:'SELECT account, funnel, spend, leads, spend/leads FROM mart.meta_accounts;',l:'I lead dei pazienti restano aggregati: nel database non entrano dati personali.'},
+anom:{t:'Anomalie aperte',q:'Cosa va guardato adesso?',c:'Regole SQL che girano dopo ogni aggiornamento. Ogni regola ha una soglia e manda un avviso.',s:"SELECT d.id FROM core.deal d\nLEFT JOIN core.subscription s ON s.close_deal_id = d.id\nWHERE d.stage = 'vinto' AND s.id IS NULL\n  AND d.won_at < now() - interval '7 days';",l:'Troppi avvisi smettono di essere letti: all\'inizio pochi e precisi.'},
+ctrl:{t:'Controlli automatici',q:'I dati sono completi e corretti?',c:'Ogni 15 minuti confronto il database con un conteggio o un totale chiesto direttamente all\'API. Se non torna, le metriche della fonte restano vuote. Un servizio esterno avvisa se il controllo stesso smette di girare.',s:'assert db_active_subs == stripe_active_subs',l:'Un controllo deve poter fallire. L\'effetto si vede con «Prova una fonte ferma», in alto.'}
+};
+const MESI=['nov','dic','gen','feb','mar','apr','mag','giu','lug','ago','set','ott'];
+const SRC={stripe:{n:'Stripe',t:'circa 3 min'},close:{n:'Close',t:'circa 3 min'},wise:{n:'Wise',t:'15 min, da provare'},revolut:{n:'Revolut',t:'15 min'},mercury:{n:'Mercury',t:'15 min'},meta:{n:'Meta',t:'1 ora'}};
+Object.keys(SRC).forEach(s=>document.getElementById('fail').add(new Option(SRC[s].n,s)));
+const BANKS=['wise','revolut','mercury'];
+let failing='',view=P.get('view')||'cassa';
+function renderSources(){document.getElementById('sources').innerHTML=Object.keys(SRC).map(s=>`<span class="src ${s===failing?'bad':''}"><i class="dot"></i><b>${SRC[s].n}</b><span>${s===failing?'ferma':'previsto: '+SRC[s].t}</span></span>`).join('')}
+const freshTxt=d=>!d.length?'Da aggiungere come nuova fonte':d.includes(failing)?`${SRC[failing].n} ferma: la metrica resta vuota e parte l'avviso.`:`Fonti: ${d.map(s=>SRC[s].n).join(', ')}`;
+const isStale=d=>failing&&d.includes(failing);
+function card(id,w,deps,inner){return `<section class="card${isStale(deps)?' stale':''}" style="--w:${w}" data-id="${id}"><div class="ch"><h2>${EX[id].t}</h2><div class="act"><button data-x="${id}" aria-label="Spiegazione: ${EX[id].t}">?</button></div></div>${inner}<div class="fresh">${freshTxt(deps)}</div></section>`}
+/* value vuoto = metrica da collegare; prov = da dove viene un numero reale */
+function tile(id,w,deps,value,sub,o={}){const shown=value&&!isStale(deps)?value:'—',empty=shown==='—';return card(id,w,deps,`<div class="val${o.hero?' hero':''}${empty?' empty':''}">${shown}</div><div class="sub">${sub}</div>${o.prov&&!empty?`<div class="prov"><b>Dato:</b> ${o.prov}</div>`:''}`)}
+function chart(id,w,deps,series,unit){const leg=series.length>1?`<div class="legend">${series.map(z=>`<span><i style="background:var(${z[1]})"></i>${z[0]}</span>`).join('')}</div>`:'';return card(id,w,deps,`<div class="chart" id="c-${id}" data-unit="${unit}"></div>${leg}`)}
+function drawCharts(){document.querySelectorAll('.chart').forEach(el=>{const W=Math.max(el.clientWidth,260),h=170,L=14,R=14,T=10,B=24;let s=`<svg viewBox="0 0 ${W} ${h}" height="${h}" role="img" aria-label="Grafico da collegare: ${el.dataset.unit}">`;for(let i=0;i<=3;i++){const y=T+(h-T-B)*i/3;s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--${i==3?'base':'grid'})"/>`}const showAll=W>560;MESI.forEach((m,i)=>{if(showAll||i%2==0||i==11)s+=`<text x="${L+i*(W-L-R)/11}" y="${h-7}" text-anchor="${i==0?'start':i==11?'end':'middle'}" font-size="11" fill="var(--mute)">${m}</text>`});s+=`<text x="${W/2}" y="${T+(h-T-B)/2+4}" text-anchor="middle" font-size="12.5" fill="var(--ink2)">${el.dataset.unit}</text></svg>`;el.innerHTML=s})}
+const D='<span class="dash">—</span>';
+const V={
+cassa:{q:'Quanta cassa abbiamo, dove si trova e per quanto regge?',r(){return tile('cassa',5,BANKS,'','Somma dei saldi dei tre istituti, in euro',{hero:true})
++tile('coper',3,BANKS,'','Cassa divisa per la media delle uscite degli ultimi 3 mesi')
++tile('gir',2,BANKS,'','Trasferimenti fra conti propri, tolti da entrate e uscite')
++tile('scost',2,BANKS,'','Saldo calcolato meno saldo dichiarato dall\'API')
++chart('saldo',6,BANKS,[['Cassa','--s1']],'Cassa di fine mese, in euro')
++chart('flussi',6,BANKS,[['Entrate','--s1'],['Uscite','--s2']],'Entrate e uscite del mese, in euro')
++card('conti',12,BANKS,`<div class="scroll"><table><tr><th>Istituto</th><th class="num">Saldo per valuta</th><th class="num">In euro</th><th class="num">Calcolato meno API</th><th>Lettura prevista</th></tr>${BANKS.map(s=>`<tr><td>${SRC[s].n}</td><td class="num">${D}</td><td class="num">${D}</td><td class="num">${D}</td><td>${SRC[s].t}</td></tr>`).join('')}</table></div>`)}},
+ricavi:{q:'Quanto incassiamo di ricorrente e quanto rischiamo di perdere?',r(){const d=['stripe'];return tile('att',4,d,'505','Abbonamenti in stato active o past_due',{hero:true,prov:'traccia della prova'})
++tile('mrr',3,d,'','Ogni abbonamento riportato al mese, sconti compresi')
++tile('churn',2,d,'','Cessati nel mese su attivi a inizio mese')
++tile('risk',3,d,'','MRR degli abbonamenti con pagamento fallito')
++chart('mrrc',7,d,[['MRR','--s1']],'MRR di fine mese, in euro')
++chart('mov',5,d,[['Aggiunto','--s1'],['Perso','--s2']],'MRR aggiunto e perso nel mese, in euro')}},
+acq:{q:'Quanto costa acquisire uno studio e dove si fermano i deal?',r(){const d=['meta','stripe','close'];return tile('perst',3,['stripe','close'],'circa 1,8','Abbonamenti per studio: 505 su oltre 280',{prov:'traccia e oralpro.it, da verificare'})
++tile('visite',3,[],'1.700+','Visite inviate ogni mese agli studi: non sono in nessuna delle sei fonti',{prov:'oralpro.it'})
++tile('pipe',3,['close'],'500+','Deal in Close, da contare per stato',{prov:'traccia della prova'})
++tile('cop',3,['stripe','close'],'','Abbonamenti collegati a uno studio. Sotto il 90% il CAC porta un avviso')
++tile('cac',4,d,'','Spesa dell\'account studi più costi commerciali, su nuovi studi')
++tile('falso',4,['meta','stripe'],'','Tutta la spesa Meta sui nuovi studi: mescola i due funnel e sovrastima il costo')
++tile('pay',4,d,'','Spesa sull\'MRR nuovo, poi corretta col margine')
++chart('spesa',7,['meta'],[['Account 1','--s1'],['Account 2','--s2'],['Account 3','--s3']],'Spesa Meta del mese per account, in euro')
++card('acc',5,['meta'],`<div class="scroll"><table><tr><th>Account</th><th>Funnel</th><th class="num">Spesa</th><th class="num">Lead</th></tr>${[1,2,3].map(n=>`<tr><td>Account ${n}</td><td>da verificare</td><td class="num">${D}</td><td class="num">${D}</td></tr>`).join('')}</table></div>`)}},
+anom:{q:'Cosa va guardato adesso, e di quali dati possiamo fidarci?',r(){const items=[['c','Critico','Pagamento fallito','Abbonamento in stato past_due. Azione: elenco per l\'assistenza clienti.'],['c','Critico','Fonte ferma','Controllo fallito o età oltre la soglia. Azione: metrica vuota e avviso al responsabile.'],['w','Attenzione','Deal vinto senza abbonamento da più di 7 giorni','Può essere un\'attivazione bloccata o un collegamento mancante.'],['w','Attenzione','Copertura sotto il 90%','Il CAC porta un avviso e i casi dubbi vanno in coda a una persona.'],['w','Attenzione','Movimento sotto la soglia di confidenza','La categoria proposta entra nei totali solo dopo la conferma di una persona.']];
+const ctrls=[['stripe','Abbonamenti attivi nel DB = su API'],['close','Totale deal nel DB = su API'],['wise','Saldo calcolato = saldo API'],['revolut','Saldo calcolato = saldo API'],['mercury','Saldo calcolato = saldo API'],['meta','Spesa di ieri per account, campi richiesti presenti']];
+const all=Object.keys(SRC);return card('anom',7,all,items.map(a=>`<div class="alert"><span class="tag ${a[0]}"><i>${a[0]=='c'?'!':'•'}</i>${a[1]}</span><p>${a[2]}</p><small>${a[3]}</small></div>`).join(''))
++card('ctrl',5,all,`<div class="scroll"><table><tr><th>Fonte</th><th>Controllo ogni 15 minuti</th><th>Esito</th></tr>${ctrls.map(c=>`<tr><td>${SRC[c[0]].n}</td><td>${c[1]}</td><td>${c[0]===failing?'<span class="tag c"><i>!</i>Fallito</span>':D}</td></tr>`).join('')}</table></div>`)}}
+};
+const TABS=[['cassa','Cassa'],['ricavi','Ricavi'],['acq','Acquisizione'],['anom','Anomalie']];
+function render(){if(!V[view])view='cassa';renderSources();document.getElementById('tabs').innerHTML=TABS.map(t=>`<button role="tab" aria-selected="${t[0]===view}" data-v="${t[0]}">${t[1]}</button>`).join('');document.getElementById('q').textContent=V[view].q;const bn=failing?`<div class="banner" role="status"><b>${SRC[failing].n} è ferma.</b> Le metriche che ne dipendono restano vuote: nessun numero vecchio che sembra aggiornato. L'avviso parte da solo e al ritorno della fonte i dati mancanti si recuperano.</div>`:'';document.getElementById('main').innerHTML=bn+V[view].r();drawCharts()}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.v){view=b.dataset.v;render()}
+if(b.dataset.x){const x=EX[b.dataset.x];document.getElementById('dc').innerHTML=`<h3>${x.t}</h3><h4>A quale domanda risponde</h4><p>${x.q}</p><h4>Come si calcola</h4><p>${x.c}</p><h4>In SQL</h4><pre>${x.s.replace(/</g,'&lt;')}</pre><h4>Limite da conoscere</h4><p>${x.l}</p>`;const d=document.getElementById('drawer');d.classList.add('on');d.setAttribute('aria-hidden','false');d.focus()}
+if(b.id==='dx')closeD()});
+const closeD=()=>{const d=document.getElementById('drawer');d.classList.remove('on');d.setAttribute('aria-hidden','true')};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeD()});
+document.getElementById('fail').addEventListener('change',e=>{failing=e.target.value;render()});
+let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(drawCharts,120)});
+if(P.get('fail')){failing=P.get('fail');document.getElementById('fail').value=failing}
+render();
+if(P.get('explain')){const b=document.querySelector(`[data-x="${P.get('explain')}"]`);if(b)b.click()}
+</script></body></html>

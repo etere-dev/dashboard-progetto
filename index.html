@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Dashboard di management - Davide Campo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--ink:#14181f;--ink2:#465061;--line:#d8dde5;--wash:#f3f5f8;--acc:#0f5fa8;--page:#fff}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--ink:#eef1f5;--ink2:#b6bfcc;--line:#343b46;--wash:#1b2027;--acc:#6db0ec;--page:#12151a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:400 16px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1080px;margin:0 auto;padding:40px 16px 48px}
+header{border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:24px}
+h1{font-size:clamp(24px,4vw,32px);line-height:1.15;margin:0 0 4px;letter-spacing:-.01em}
+header p{margin:0;color:var(--ink2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+a.card{display:flex;flex-direction:column;color:inherit;text-decoration:none;background:var(--wash);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+a.card:hover{border-color:var(--acc)}
+a.card:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.prev{aspect-ratio:16/10;background:#fff;border-bottom:1px solid var(--line);overflow:hidden}
+.prev img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.txt{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
+h2{font-size:18px;margin:0 0 4px}
+.txt p{margin:0 0 12px;font-size:14.5px;color:var(--ink2)}
+.go{margin-top:auto;font-weight:600;color:var(--acc);font-size:14.5px}
+</style></head><body><main>
+<header><h1>Dashboard di management</h1><p>Davide Campo · materiali della prova per AI &amp; Automation Specialist</p></header>
+<div class="grid">
+<a class="card" href="dashboard.html"><div class="prev"><img src="cassa.png" alt="Anteprima della dashboard"></div><div class="txt"><h2>Dashboard cliccabile</h2><p>Quattro viste, con formula e SQL per ogni riquadro. Contiene solo i numeri della traccia e di oralpro.it; il menu in alto mostra cosa succede quando una fonte si ferma.</p><span class="go">Apri la dashboard</span></div></a>
+<a class="card" href="lavagna.png"><div class="prev"><img src="lavagna.png" alt="Anteprima della lavagna"></div><div class="txt"><h2>Lavagna</h2><p>Il ragionamento di partenza: cosa dicono i numeri, i due funnel e perché cambiano il CAC.</p><span class="go">Apri la lavagna</span></div></a>
+<a class="card" href="schemi.pdf"><div class="prev"><img src="schemi.png" alt="Anteprima degli schemi"></div><div class="txt"><h2>Schemi di progetto</h2><p>Architettura, modello dati, percorso del denaro, gestione dei guasti, limiti di ogni fonte e piano di lavoro. PDF, 8 pagine.</p><span class="go">Apri gli schemi</span></div></a>
+</div>
+</main></body></html>
